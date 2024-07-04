@@ -1,0 +1,415 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package com.library.app.jframe;
+
+import com.library.app.db.DBConnection;
+import com.library.app.services.UserService;
+import com.library.app.validation.SignupValidation;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Niraj Surve
+ */
+public class SignupPage extends JFrame {
+
+    private final UserService userService = new UserService();
+
+    /**
+     * Creates new form SignupPage
+     */
+    public SignupPage() {
+        this.setResizable(false);
+        initComponents();
+    }
+
+    private boolean validateDetails(String username, String email, String phone, String password) {
+        boolean success = true;
+
+        SignupValidation validate = new SignupValidation();
+        String validatedUsername = validate.validateUsername(username);
+        String validatedPassword = validate.validatePassword(password);
+        String validatedEmail = validate.validateEmail(email);
+        String validatedPhone = validate.validatePhone(phone);
+
+        if ("Required".equals(validatedUsername)) {
+            JOptionPane.showMessageDialog(this, "Username is required..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Invalid".equals(validatedUsername)) {
+            JOptionPane.showMessageDialog(this, "Invalid Username..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Required".equals(validatedEmail)) {
+            JOptionPane.showMessageDialog(this, "Email is required..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Invalid".equals(validatedEmail)) {
+            JOptionPane.showMessageDialog(this, "Invalid Email..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Required".equals(validatedPhone)) {
+            JOptionPane.showMessageDialog(this, "Phone number is required..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Invalid".equals(validatedPhone)) {
+            JOptionPane.showMessageDialog(this, "Invalid Phone Number..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Required".equals(validatedPassword)) {
+            JOptionPane.showMessageDialog(this, "Password is required..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Greater".equals(validatedPassword)) {
+            JOptionPane.showMessageDialog(this, "Password should be more than 8 characters..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+        if ("Lesser".equals(validatedPassword)) {
+            JOptionPane.showMessageDialog(this, "Password should be less than 16 characters..!", "Error", JOptionPane.ERROR_MESSAGE);
+            success = false;
+        }
+
+        return success;
+    }
+
+    // method to insert values into users table
+    public void registerUser() {
+        String username = txt_username.getText();
+        String email = txt_email.getText();
+        String phone = txt_phone.getText();
+        String password = txt_password.getText();
+
+        boolean success = validateDetails(username, email, phone, password);
+
+        if (success) {
+            try {
+                Connection conn = DBConnection.getConnection();
+                String sql = "insert into users(username, email, phone, password) values(?, ?, ?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+
+                pst.setString(1, username);
+                pst.setString(2, email);
+                pst.setString(3, phone);
+                pst.setString(4, password);
+
+                int updatedRowCount = pst.executeUpdate();
+
+                if (updatedRowCount > 0) {
+                    JOptionPane.showMessageDialog(this, "Registration Successful..!");
+                    LoginPage loginPage = new LoginPage();
+                    loginPage.setVisible(true);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to register..! Please try again later.");
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Failed to register. Please try again later.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        txt_username.setText("");
+        txt_email.setText("");
+        txt_phone.setText("");
+        txt_password.setText("");
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txt_username = new app.bolivia.swing.JCTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txt_email = new app.bolivia.swing.JCTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txt_phone = new app.bolivia.swing.JCTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txt_password = new rojerusan.RSPasswordTextPlaceHolder();
+        jLabel3 = new javax.swing.JLabel();
+        rSMaterialButtonRectangle1 = new rojerusan.RSMaterialButtonRectangle();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Library App - Sign Up");
+        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setMinimumSize(new java.awt.Dimension(1000, 600));
+        setPreferredSize(null);
+        setResizable(false);
+        setSize(new java.awt.Dimension(1000, 600));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 30)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(121, 173, 220));
+        jLabel1.setText("LIBRARY APP");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 120, 190, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/signup-library-icon.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 590, 400));
+
+        jLabel6.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 30)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel6.setText("WELCOME TO");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 200, -1));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/dev-logo.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 110, 30));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, 600));
+
+        jPanel3.setBackground(new java.awt.Color(121, 173, 220));
+        jPanel3.setPreferredSize(new java.awt.Dimension(410, 600));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setFont(new java.awt.Font("Gill Sans MT", 1, 30)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Sign Up");
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("Verdana", 0, 17)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Create New Account");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, -1));
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/user.png"))); // NOI18N
+        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 115, -1, -1));
+
+        txt_username.setBackground(new java.awt.Color(121, 173, 220));
+        txt_username.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        txt_username.setForeground(new java.awt.Color(255, 255, 255));
+        txt_username.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txt_username.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txt_username.setPlaceholder("Username");
+        txt_username.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_usernameActionPerformed(evt);
+            }
+        });
+        jPanel3.add(txt_username, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 270, 40));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/email.png"))); // NOI18N
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 205, -1, -1));
+
+        txt_email.setBackground(new java.awt.Color(121, 173, 220));
+        txt_email.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        txt_email.setForeground(new java.awt.Color(255, 255, 255));
+        txt_email.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txt_email.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txt_email.setPlaceholder("Email");
+        txt_email.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_emailFocusLost(evt);
+            }
+        });
+        txt_email.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_emailActionPerformed(evt);
+            }
+        });
+        jPanel3.add(txt_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, 270, 40));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/phone.png"))); // NOI18N
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 295, -1, -1));
+
+        txt_phone.setBackground(new java.awt.Color(121, 173, 220));
+        txt_phone.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(1, 1, 1, 1, new java.awt.Color(255, 255, 255)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        txt_phone.setForeground(new java.awt.Color(255, 255, 255));
+        txt_phone.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txt_phone.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txt_phone.setPlaceholder("Phone");
+        txt_phone.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txt_phoneFocusLost(evt);
+            }
+        });
+        txt_phone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_phoneActionPerformed(evt);
+            }
+        });
+        jPanel3.add(txt_phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 290, 270, 40));
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/password.png"))); // NOI18N
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 385, -1, -1));
+
+        txt_password.setBackground(new java.awt.Color(121, 173, 220));
+        txt_password.setBorder(javax.swing.BorderFactory.createCompoundBorder(new javax.swing.border.MatteBorder(1, 1, 1, 0, new java.awt.Color(255, 255, 255)), javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+        txt_password.setForeground(new java.awt.Color(255, 255, 255));
+        txt_password.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        txt_password.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        txt_password.setNextFocusableComponent(jLabel8);
+        txt_password.setPhColor(new java.awt.Color(0, 0, 0));
+        txt_password.setPlaceholder("Password");
+        jPanel3.add(txt_password, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 380, 230, 40));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/eye.png"))); // NOI18N
+        jLabel3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 1, 1, new java.awt.Color(255, 255, 255)));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 380, -1, 40));
+
+        rSMaterialButtonRectangle1.setBackground(new java.awt.Color(255, 51, 51));
+        rSMaterialButtonRectangle1.setText("Sign Up");
+        rSMaterialButtonRectangle1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rSMaterialButtonRectangle1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(rSMaterialButtonRectangle1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 440, 150, 50));
+
+        jLabel13.setFont(new java.awt.Font("Verdana", 0, 17)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("Already have an account?");
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Verdana", 0, 17)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(153, 255, 102));
+        jLabel8.setText("Sign in");
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 520, -1, -1));
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 0, 410, 600));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_emailActionPerformed
+
+    private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_usernameActionPerformed
+
+    private void txt_phoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_phoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_phoneActionPerformed
+
+    private void rSMaterialButtonRectangle1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rSMaterialButtonRectangle1ActionPerformed
+        // register the user
+        registerUser();
+    }//GEN-LAST:event_rSMaterialButtonRectangle1ActionPerformed
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        char echoChar = txt_password.getEchoChar();
+        if (echoChar == 0) {
+            // If echoChar is 0, set it back to default (bullet or asterisk)
+            txt_password.setEchoChar('\u2022');
+            jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/eye.png")));
+        } else {
+            // Otherwise, set it to 0 to show the actual characters
+            txt_password.setEchoChar((char) 0);
+            jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/signup/eye-close.png")));
+        }
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void txt_emailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_emailFocusLost
+        if (userService.getUserByEmail(txt_email.getText())) {
+            JOptionPane.showMessageDialog(this, "User with the email " + txt_email.getText() + " already exists..!", "Warning", JOptionPane.WARNING_MESSAGE);
+            txt_email.setText("");
+        }
+    }//GEN-LAST:event_txt_emailFocusLost
+
+    private void txt_phoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_phoneFocusLost
+        if (userService.getUserByPhone(txt_phone.getText())) {
+            JOptionPane.showMessageDialog(this, "User with the number " + txt_phone.getText() + " already exists..!", "Warning", JOptionPane.WARNING_MESSAGE);
+            txt_phone.setText("");
+        }
+    }//GEN-LAST:event_txt_phoneFocusLost
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        this.setVisible(false);
+        LoginPage loginPage = new LoginPage();
+        loginPage.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel8MouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SignupPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SignupPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SignupPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SignupPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new SignupPage().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private rojerusan.RSMaterialButtonRectangle rSMaterialButtonRectangle1;
+    private app.bolivia.swing.JCTextField txt_email;
+    private rojerusan.RSPasswordTextPlaceHolder txt_password;
+    private app.bolivia.swing.JCTextField txt_phone;
+    private app.bolivia.swing.JCTextField txt_username;
+    // End of variables declaration//GEN-END:variables
+}
